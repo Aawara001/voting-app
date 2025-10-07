@@ -25,19 +25,20 @@ spec:
       - name: api
         image: cloudacademydevops/api:v3
         imagePullPolicy: Always
-        env:
-          - name: MONGO_CONN_STR
-            value: mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo:27017/langdb?replicaSet=rs0
-          - name: MONGO_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-secret
-                key: username
-          - name: MONGO_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-secret
-                key: password
+        envFrom:                          # 👈 NEW: Load config from ConfigMap
+        - configMapRef:
+            name: voting-app-config       # Must match your ConfigMap name
+        env:                              # Keep secrets here
+        - name: MONGO_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: username
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: password
         ports:
         - containerPort: 8080
         livenessProbe:
