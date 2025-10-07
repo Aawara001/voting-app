@@ -1,18 +1,14 @@
+# manifests/api-configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: voting-app-config
   namespace: cloudchamp
 data:
-  # Database config
-  MONGO_DB_NAME: langdb
-  MONGO_REPLICA_SET: rs0
-  MONGO_SERVICE: mongo
-
-  # API config
-  API_PORT: "8080"
-  API_LOG_LEVEL: "info"
-
-  # Frontend config
-  FRONTEND_PORT: "8080"
-  APP_TITLE: "Cloud-Native Voting Application"
+  # MongoDB replica set connection string (without auth)
+  # Format: mongodb://host1:port,host2:port,host3:port/?replicaSet=rs0
+  MONGO_URI: "mongodb://mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/?replicaSet=rs0&connectTimeoutMS=10000&socketTimeoutMS=45000"
+  
+  # Optional: App settings
+  APP_NAME: "CloudChamp Voting App"
+  LOG_LEVEL: "info"
